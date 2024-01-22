@@ -13,7 +13,11 @@ extension UIApplication {
 extension ASUserAgent: ASWebAuthenticationPresentationContextProviding {
 
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return UIApplication.shared()?.windows.last(where: \.isKeyWindow) ?? ASPresentationAnchor()
+        return UIApplication.shared()?.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+            .first?
+            .keyWindow ?? ASPresentationAnchor()
     }
 
 }
