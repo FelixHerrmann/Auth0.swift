@@ -298,10 +298,10 @@ class WebAuthSpec: QuickSpec {
         }
 
         describe("redirect uri") {
-            #if os(iOS)
-            let platform = "ios"
-            #else
+            #if os(macOS)
             let platform = "macos"
+            #else
+            let platform = "ios"
             #endif
 
             context("custom scheme") {
