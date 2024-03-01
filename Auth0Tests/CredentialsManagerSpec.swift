@@ -1,3 +1,4 @@
+#if !targetEnvironment(simulator)
 import Combine
 import Quick
 import Nimble
@@ -1384,3 +1385,4 @@ class CredentialsManagerSpec: QuickSpec {
 
     }
 }
+#endif
