@@ -154,6 +154,7 @@ public struct AuthenticationError: Auth0APIError {
         }
 
         let networkErrorCodes: [URLError.Code] = [
+            .dataNotAllowed,
             .notConnectedToInternet,
             .networkConnectionLost,
             .dnsLookupFailed,
