@@ -196,7 +196,12 @@ final class Auth0WebAuth: WebAuth {
         let provider = self.provider ?? WebAuthentication.asProvider(redirectURL: redirectURL,
                                                                      ephemeralSession: ephemeralSession,
                                                                      headers: headers)
+
+        var hasCompleted = false
         let userAgent = provider(authorizeURL) { [storage, barrier, onCloseCallback] result in
+            guard !hasCompleted else { return }
+            hasCompleted = true
+
             storage.clear()
             barrier.lower()
 
@@ -207,6 +212,7 @@ final class Auth0WebAuth: WebAuth {
                 callback(.failure(error))
             }
         }
+
         let transaction = LoginTransaction(redirectURL: redirectURL,
                                            state: state,
                                            userAgent: userAgent,
@@ -237,11 +243,17 @@ final class Auth0WebAuth: WebAuth {
         }
 
         let provider = self.provider ?? WebAuthentication.asProvider(redirectURL: redirectURL, headers: headers)
+        
+        var hasCompleted = false
         let userAgent = provider(logoutURL) { [storage, barrier] result in
+            guard !hasCompleted else { return }
+            hasCompleted = true
+
             storage.clear()
             barrier.lower()
             callback(result)
         }
+
         let transaction = ClearSessionTransaction(userAgent: userAgent)
         self.storage.store(transaction)
         userAgent.start()
